@@ -1,0 +1,52 @@
+<main class="row justify-content-center mt-5">
+    <h1 class="h3 mb-3 fw-normal text-center">Sign In</h1>
+
+    <form class="col-md-5 text-center" [formGroup]="signinForm">
+
+        <div class="alert alert-danger text-start" role="alert" *ngIf="isSignInFailed">
+            <h4 class="alert-heading">Failed!</h4>
+            <div class="d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Danger:">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                <div>
+                    {{ errorMessage }}
+                </div>
+            </div>
+
+        </div>
+        <div class="alert alert-success text-start" role="alert" *ngIf="isSuccessful">
+            <h4 class="alert-heading">Success</h4>
+            <div class="d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Success:">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                </svg>
+                <div>
+                    You are signed in!
+                </div>
+            </div>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="email" name="email" class="form-control" id="floatingEmail" placeholder="name@groupomania.io" required formControlName="email" [ngClass]="{'is-invalid': signinForm.controls['email'].invalid && (signinForm.controls['email'].dirty || signinForm.controls['email'].touched)}">
+            <label for="floatingEmail">Email</label>
+
+            <div class="text-danger" *ngIf="signinForm.controls['email'].invalid && (signinForm.controls['email'].dirty || signinForm.controls['email'].touched)">
+                <div *ngIf="signinForm.controls['email'].errors?.['required']">Email is required</div>
+                <div *ngIf="signinForm.controls['email'].errors?.['email']">Email must be a valid email address</div>
+            </div>
+        </div>
+
+        <div class="form-floating">
+            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="password" required minlength="6" formControlName="password" [ngClass]="{'is-invalid': signinForm.controls['password'].invalid && (signinForm.controls['password'].dirty || signinForm.controls['password'].touched)}">
+            <label for="floatingPassword">Password</label>
+
+            <div class="text-danger" *ngIf="signinForm.controls['password'].invalid && (signinForm.controls['password'].dirty || signinForm.controls['password'].touched)">
+                <div *ngIf="signinForm.controls['password'].errors?.['required']">Password is required</div>
+                <div *ngIf="signinForm.controls['password'].errors?.['minlength']">Password must be at least 6 characters</div>
+              </div>
+        </div>
+
+        <button class="w-100 btn btn-lg btn-primary  mt-3" type="button" [disabled]="signinForm.invalid" (click)="onSignin()">Sign In</button>
+    </form>
+</main>
