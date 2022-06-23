@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { StorageService } from './services/storage.service';
+
+import { User } from './models/User.model';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -8,34 +9,25 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent {
-    is_admin = false;
-    isSignedIn = false;
-    email?: string;
+export class AppComponent
+{
+    loggedIn: boolean = false;
 
-    constructor(private storageService: StorageService, private authService: AuthService) { }
+    user: User|null = null;
+
+    constructor(private authService: AuthService) {}
 
     ngOnInit(): void {
-        this.isSignedIn = this.storageService.isSignedIn();
+        this.authService.loggedIn.subscribe(loggedIn => {
+            this.loggedIn = loggedIn;
+        });
 
-        if (this.isSignedIn) {
-            const user = this.storageService.getUser();
-            this.is_admin = user.is_admin;
-            this.email = user.email;
-        }
+        this.authService.user.subscribe(user => {
+            this.user = user;
+        });
     }
 
     logout(): void {
-        this.authService.logout().subscribe({
-            next: res => {
-                console.log(res);
-                this.storageService.clean();
-
-                window.location.reload();
-            },
-            error: err => {
-                console.log(err);
-            }
-        });
+        this.authService.logout();
     }
 }

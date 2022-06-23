@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <app-create></app-create>
+        </div>
+
+        <ng-container *ngIf="posts$ | async as posts">
+            <div class="col-lg-6">
+                <p *ngIf="posts.length <= 0">
+                    No posts to display!
+                </p>
+                <div class="post-list" *ngIf="posts.length > 0">
+                    <div class="card post-list-item mb-5" *ngFor="let post of posts">
+                        <div class="card-body">
+
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <fa-icon [icon]="faCalendarDays"></fa-icon> Created {{ post.createdAt | date:'fullDate' }}
+                            </h6>
+                                <p class="card-text">
+                                {{ post.content }}
+                            </p>
+                        </div>
+                        <a [routerLink]="['posts', post.id]" class="nav-link px-2 link-dark">GOT TO POST</a>
+                        <img src="{{ post.imageUrl }}" class="card-img-top" alt="Post image">
+                        </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <div class="col-lg-2">
+            Column
+        </div>
+    </div>
+</div>

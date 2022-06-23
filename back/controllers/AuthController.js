@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const Jwt = require('jsonwebtoken');
 const db = require("../models");
 const User = db.User;
 
@@ -67,41 +66,48 @@ class AuthController
                 });
             }
 
-            // Create a jwt token.
-            const token = Jwt.sign(
-                {
-                    exp: Math.floor(Date.now() / 1000) + parseInt(process.env.JWT_EXPIRATION),
-                    userId: user._id
-                },
-                process.env.JWT_SECRET
-            );
-            req.session.token = token;
+            //Get users fields as object and delete password from the object then set in the session.
+            const userWithoutPassword = user.get();
+            delete userWithoutPassword.password;
+            req.session.user = {...userWithoutPassword};
 
             return res.status(200).json({
-                userId: user._id,
-                email: user.email,
-                is_admin: user.is_admin
+                ...userWithoutPassword
             });
 
         } catch (error) {
-                res.status(500).json({
-                    message: error.message
-                });
+            res.status(500).json({
+                message: error.message
+            });
         };
     }
 
-    async signout(req, res)
+    signout(req, res)
     {
-        try {
-            req.session = null;
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).send({
+                    message: "'Could not log out.'"
+                });
+            }
 
-            return res.status(200).send({
+            res.status(200).send({
                 message: "You've been signed out!"
             });
-        } catch (err) {
-            this.next(err);
+        });
+     };
+
+    login(req, res)
+     {
+        if (req.session && req.session.user) {
+            return res.status(200).send({
+                loggedIn: true,
+                user: req.session.user
+            });
         }
-      };
+
+        res.status(200).send({loggedIn: false})
+     }
 }
 
 module.exports = AuthController;

@@ -23,4 +23,7 @@ module.db = db;
 db.User = require("../models/User.js");
 db.Post = require("../models/Post.js");
 
+// Declare associations models.
+db.User.hasMany(db.Post);
+
 module.exports = db;

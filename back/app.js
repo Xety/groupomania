@@ -5,9 +5,10 @@ dotenv.config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const cookieSession = require("cookie-session");
+const session = require("express-session");
 const db = require("./models");
 const authRoutes = require('./routes/auth');
+const postsRoutes = require('./routes/posts');
 
 
 // Set the CORS options.
@@ -30,19 +31,20 @@ app.use(express.json());
 // Parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-    cookieSession({
-      name: process.env.COOKIE_NAME,
-      secret: process.env.COOKIE_SECRET, // should use as secret environment variable
-      httpOnly: true
-    });
-);
+app.use(session({
+    name: process.env.SESSION_NAME,
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 3600000 }
+}));
 
 // Serve static images.
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postsRoutes);
 
 
 module.exports = app;

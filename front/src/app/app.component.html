@@ -1,7 +1,7 @@
 <div id="app">
     <div class="container">
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-            <a routerLink="home" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <a routerLink="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
                 <img src="../assets/groupomania_header.png" alt="Groupomania" height="50px">
             </a>
 
@@ -9,19 +9,20 @@
                     <li><a routerLink="/" class="nav-link px-2 link-dark">Home</a></li>
             </ul>
 
-            <div class="col-md-3 text-end" *ngIf="!isSignedIn">
+            <div class="col-md-3 text-end" *ngIf="!loggedIn">
                 <button type="button" class="btn btn-outline-primary me-2" routerLink="auth/signin" routerLinkActive="active">Sign In</button>
                 <button type="button" class="btn btn-outline-primary" routerLink="auth/signup" routerLinkActive="active">Sign Up</button>
             </div>
-            <ul class="col-md-3 text-end nav flex-row-reverse" *ngIf="isSignedIn">
+            <ul class="col-md-3 text-end nav flex-row-reverse" *ngIf="loggedIn">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://picsum.photos/30/30" class="img-thumbnail" alt="Avatar">
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                      <li><a class="dropdown-item disabled" href="#">{{ email }}</a></li>
-                      <li><a class="dropdown-item disabled" href="#">{{is_admin ? "Role: Admin" : "Role: User"}}</a></li>
-                      <li><a class="dropdown-item text-danger" href="#" (click)="logout()">LogOut</a></li>
+                      <li><a class="dropdown-item disabled" href="#">{{ user?.email }}</a></li>
+                      <li><a class="dropdown-item disabled" href="#">{{ user?.is_admin ? "Role: Admin" : "Role: User" }}</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item text-danger" (click)="logout()" href="#">LogOut</a></li>
                     </ul>
                   </li>
             </ul>
@@ -31,6 +32,6 @@
 
         <footer class="py-3 my-4">
             <p class="text-center text-muted">© 2022 Groupomania, Inc</p>
-          </footer>
+        </footer>
     </div>
 </div>

@@ -1,0 +1,22 @@
+<h2 class="mb-2">Create a post</h2>
+<form [formGroup]="postForm">
+
+    <div class="form-floating mb-3">
+        <textarea class="form-control"  formControlName="content" style="height: 150px" placeholder="Write your post here" id="floatingContent" [ngClass]="{'is-invalid': postForm.controls['content'].invalid && (postForm.controls['content'].dirty || postForm.controls['content'].touched)}"></textarea>
+        <label for="floatingContent">Content</label>
+
+        <div class="text-danger" *ngIf="postForm.controls['content'].invalid && (postForm.controls['content'].dirty || postForm.controls['content'].touched)">
+            <div *ngIf="postForm.controls['content'].errors?.['required']">Content is required</div>
+            <div *ngIf="postForm.controls['content'].errors?.['minlength']">Content must be at least 6 characters</div>
+            <div *ngIf="postForm.controls['content'].errors?.['maxlength']">Content must be at max 250 characters</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input class="form-control" type="file" id="image" accept="image/*" #imageInput (change)="onFileChange($event)">
+
+        <img [src]="imagePreview" *ngIf="imagePreview" class="imagePreview" style="max-height: 100px;display:block;margin-top:10px;border: 1px solid #ddd;padding: 5px;">
+      </div>
+
+    <button class="btn  btn-primary  mt-3" type="button" [disabled]="postForm.invalid" (click)="onSubmit()">Create</button>
+</form>

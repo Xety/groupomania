@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
-import { StorageService } from '../../services/storage.service';
 
 @Component({
     selector: 'app-signup',
@@ -13,26 +13,22 @@ import { StorageService } from '../../services/storage.service';
 export class SignupComponent implements OnInit
 {
     signupForm!: FormGroup;
-    isSuccessful = false;
-    isSignUpFailed = false;
-    errorMessage!: string;
 
     constructor(
-        private storageService: StorageService,
         private formBuilder: FormBuilder,
         private authService: AuthService,
-        private router: Router)
+        private router: Router,
+        private toastr: ToastrService)
     { }
 
     ngOnInit(): void {
         this.signupForm = this.formBuilder.group({
             email: [null, [Validators.required, Validators.email]],
-            password: [null, Validators.required, Validators.minLength(6)]
+            password: [null, [Validators.required, Validators.minLength(6)]]
         });
 
         // If the user is already connected redirect him to the home page.
-        let isSignedIn = this.storageService.isSignedIn();
-        if (isSignedIn) {
+        if(this.authService.loggedIn) {
             this.router.navigate(['/']);
         }
     }
@@ -43,21 +39,14 @@ export class SignupComponent implements OnInit
 
         this.authService.signup(email, password).subscribe({
             next: data => {
-                console.log(data);
-                this.isSuccessful = true;
-                this.isSignUpFailed = false;
+                this.toastr.success('Your registration is successful!', 'Success!');
 
                 setTimeout(() => {
-                    this.router.navigate(['/signin']);
+                    this.router.navigate(['/auth/signin']);
                 }, 3000);
             },
             error: err => {
-                this.errorMessage = err.error.message;
-                this.isSignUpFailed = true;
-
-                setTimeout(() => {
-                    this.isSignUpFailed = false;
-                }, 3000);
+                this.toastr.error(err.error.message, 'Error!');
             }
         });
     }
