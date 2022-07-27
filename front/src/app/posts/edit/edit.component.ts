@@ -1,22 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-
 import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
-    selector: 'app-create',
-    templateUrl: './create.component.html',
-    styleUrls: ['./create.component.scss']
+  selector: 'app-edit',
+  templateUrl: './edit.component.html',
+  styleUrls: ['./edit.component.scss']
 })
-export class CreateComponent implements OnInit
+export class EditComponent implements OnInit
 {
     postForm!: FormGroup;
     imagePreview!: string;
+    id!: number;
 
     constructor(
         private formBuilder: FormBuilder,
+        private router: Router,
+        private route: ActivatedRoute,
         private postsService: PostsService,
         private toastr: ToastrService) { }
 
@@ -24,7 +26,22 @@ export class CreateComponent implements OnInit
     {
         this.postForm = this.formBuilder.group({
             content: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(250)]],
-            image: [null, Validators.required],
+            image: [null],
+        });
+
+        this.route.params.subscribe(params => {
+            this.id = +params['id'];
+
+            this.postsService.getPost(params['id']).subscribe({
+                next: data => {
+                    this.postForm.patchValue(data);
+                    this.imagePreview = data.imageUrl;
+                },
+                error: err => {
+                    this.toastr.error(err.error.message, 'Error!');
+                }
+            });
+
         });
     }
 
@@ -34,16 +51,12 @@ export class CreateComponent implements OnInit
             content: this.postForm.get('content')!.value
         }
 
-        this.postsService.createPost(data, this.postForm.get('image')!.value).subscribe({
+        this.postsService.updatePost(this.id, data, this.postForm.get('image')!.value).subscribe({
             next: data => {
                 this.toastr.success(data.message, 'Success!');
 
-                // Reset the form.
-                this.postForm.reset({content: '', image: ''});
-                this.imagePreview = '';
-
-                // Refresh the posts without refreshing the windows.
-                this.postsService.getPosts();
+                // Redirect to homepage.
+                this.router.navigateByUrl('/');
             },
             error: err => {
                 this.toastr.error(err.error.message, 'Error!');

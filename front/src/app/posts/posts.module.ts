@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PostsRoutingModule } from './posts-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SingleComponent } from './single/single.component';
+
+import { PostsRoutingModule } from './posts-routing.module';
+import { EditComponent } from './edit/edit.component';
 
 
 @NgModule({
     declarations: [
-    
-    SingleComponent
-  ],
+        EditComponent
+    ],
     imports: [
         CommonModule,
         PostsRoutingModule,

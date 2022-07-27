@@ -10,11 +10,11 @@ let PostsController = require ('../controllers/PostsController');
 PostsController = new PostsController();
 
 router.get('/', AuthMiddleware.verify, PostsController.index);
-/*router.get('/:id', AuthJwtMiddleware, SaucesController.show);
-router.post('/', AuthJwtMiddleware, MulterMiddleware.create(), SaucesController.create);
-router.put('/:id', AuthJwtMiddleware, MulterMiddleware.create(), SaucesController.update);
-router.delete('/:id', AuthJwtMiddleware, SaucesController.destroy);
-router.post('/:id/like', AuthJwtMiddleware, SaucesController.rate);*/
+router.get('/:id', AuthMiddleware.verify, PostsController.show);
+router.post('/', AuthMiddleware.verify, MulterMiddleware.create(), PostsController.create);
+router.put('/:id', AuthMiddleware.verify, MulterMiddleware.create(), PostsController.update);
+router.delete('/:id', AuthMiddleware.verify, PostsController.destroy);
+router.post('/:id/rate', AuthMiddleware.verify, PostsController.rate);
 
 
 module.exports = router;

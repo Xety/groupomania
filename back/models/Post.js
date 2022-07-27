@@ -25,12 +25,12 @@ Post.init({
     usersLiked: {
         type: DataTypes.JSON,
         allowNull: false,
-        defaultValue: '{}'
+        defaultValue: []
     },
     usersDisliked: {
         type: DataTypes.JSON,
         allowNull: false,
-        defaultValue: '{}'
+        defaultValue: []
     },
 }, { sequelize});
 

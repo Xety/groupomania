@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from
 import { Observable, Subject, take, tap } from 'rxjs';
 import { AuthService } from './auth.service';
 
-@Injectable()
+@Injectable({providedIn: "root"})
 export class AuthGuard implements CanActivate {
 
     constructor(
@@ -12,10 +12,11 @@ export class AuthGuard implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot,  state: RouterStateSnapshot): Observable<boolean>
     {
-        return this.authService.loggedIn.pipe(
+        return this.authService.loggedIn$.pipe(
             take(1),
             tap(auth => {
-                console.log(`CanActivate : ${auth}`)
+                console.log(`CanActivate : ${auth}`);
+
                 if (!auth) {
                     this.router.navigate(['/auth/signin']);
                 }

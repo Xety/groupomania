@@ -1,4 +1,4 @@
-<h2 class="mb-2">Create a post</h2>
+<h2 class="mb-2">Edit a post</h2>
 <form [formGroup]="postForm">
 
     <div class="form-floating mb-3">
@@ -13,10 +13,10 @@
     </div>
 
     <div class="form-group">
-        <input formControlName="image" class="form-control" type="file" id="image" accept="image/*" (change)="onFileChange($event)">
+        <input class="form-control" type="file" id="image" accept="image/*" (change)="onFileChange($event)">
 
         <img [src]="imagePreview" *ngIf="imagePreview" class="imagePreview" style="max-height: 100px;display:block;margin-top:10px;border: 1px solid #ddd;padding: 5px;">
       </div>
 
-    <button class="btn  btn-primary  mt-3" type="button" [disabled]="postForm.invalid" (click)="onSubmit()">Create</button>
+    <button class="btn  btn-primary  mt-3" type="button" [disabled]="postForm.invalid" (click)="onSubmit()">Edit</button>
 </form>

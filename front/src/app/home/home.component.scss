@@ -1,0 +1,30 @@
+.card-img {
+    max-height: 200px;
+    overflow: hidden;
+    display: flex;
+}
+
+.card-img-img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.liked {
+    color: rgba(51, 219, 0, 1);
+}
+
+.disliked {
+    color: rgba(219, 51, 0, 1);
+}
+
+.like {
+    &:hover {
+      color: rgba(51, 219, 0, 1);
+    }
+}
+
+.dislike {
+    &:hover {
+      color: rgba(219, 51, 0, 1);
+    }
+}

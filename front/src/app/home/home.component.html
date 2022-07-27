@@ -4,13 +4,12 @@
             <app-create></app-create>
         </div>
 
-        <ng-container *ngIf="posts$ | async as posts">
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <p *ngIf="posts.length <= 0">
                     No posts to display!
                 </p>
                 <div class="post-list" *ngIf="posts.length > 0">
-                    <div class="card post-list-item mb-5" *ngFor="let post of posts">
+                    <div class="card post-list-item mb-5" *ngFor="let post of posts" >
                         <div class="card-body">
 
                             <h6 class="card-subtitle mb-2 text-muted">
@@ -20,15 +19,38 @@
                                 {{ post.content }}
                             </p>
                         </div>
-                        <a [routerLink]="['posts', post.id]" class="nav-link px-2 link-dark">GOT TO POST</a>
-                        <img src="{{ post.imageUrl }}" class="card-img-top" alt="Post image">
+                        <div class="card-img">
+                            <img src="{{ post.imageUrl }}" class="card-img-img" alt="Post image">
                         </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="btn-rating">
+                                        <button (click)="onLike(post.id!)" [disabled]="post.usersDisliked?.includes(user.id!)" class="btn">
+                                            <fa-icon [ngClass]="{ 'fas liked': post.usersLiked?.includes(user.id!) }" class="like fa-lg" [icon]="faThumbsUp"></fa-icon>
+                                        </button>
+                                        <span>{{ post.likes }}</span>
+
+                                        <button (click)="onDislike(post.id!)" [disabled]="post.usersLiked?.includes(user.id!)" class="btn">
+                                            <fa-icon [ngClass]="{ 'fas disliked': post.usersDisliked?.includes(user.id!), 'disabled': post.usersLiked?.includes(user.id!) }" class="dislike fa-lg" [icon]="faThumbsDown"></fa-icon>
+                                        </button>
+                                        <span>{{ post.dislikes }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col text-end">
+                                    <div class="btn-group" role="group" aria-label="Actions">
+                                        <button type="button" *ngIf="post.UserId == user.id! || user.is_admin! == true" (click)="editPost(post.id)" class="btn btn-info">Edit</button>
+
+                                        <button *ngIf="post.UserId == user.id! || user.is_admin! == true" (click)="deletePost(post.id)" class="btn btn-danger">Delete</button>
+                                      </div>
+                                </div>
+                              </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-        </ng-container>
 
-        <div class="col-lg-2">
-            Column
-        </div>
     </div>
 </div>
